@@ -10,7 +10,6 @@ namespace ReversedTicTacToe
         Computer,
         Player1,
         Player2
-
     }
     public enum ePlayerSign
     {
@@ -22,18 +21,24 @@ namespace ReversedTicTacToe
         private ePlayerId m_PlayerId;
         private int m_Score;
         private ePlayerSign m_ChosenSign;
+        private Tuple<int, int> m_ChosenMove;
 
         public Player(ePlayerId i_PlayerId, ePlayerSign i_ChosenSign)
         {
             this.m_PlayerId = i_PlayerId;
             this.m_Score = 0;
-            this.m_IsPlayersTurn = false;
             this.m_ChosenSign = i_ChosenSign;
+            this.m_ChosenMove = default;
         }
         public ePlayerId PlayerId
         {
             get { return m_PlayerId; }
             set { m_PlayerId = value; }
+        }
+        public Tuple<int, int> ChosenMove
+        {
+            get { return m_ChosenMove; }
+            set { m_ChosenMove = value; }
         }
         public int Score
         {

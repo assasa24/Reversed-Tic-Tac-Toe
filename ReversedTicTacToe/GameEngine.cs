@@ -11,10 +11,12 @@ namespace ReversedTicTacToe
         private Player m_Player2;
         private GameBoard m_GameBoard;
         private const int k_NotFound = -1;
+        private ePlayerId m_CurrentTurn;
+        private int m_totalHumanPlayers;
 
-        public GameEngine(int i_boardSize, int i_totalHumanPlayers, ePlayerSign player1Sign, ePlayerSign player2Sign)
+        public GameEngine(int i_boardSize, int i_totalHumanPlayers, ePlayerSign i_player1Sign, ePlayerSign i_player2Sign)
         {
-            m_Player1 = new Player(ePlayerId.Player1, player1Sign);
+            m_Player1 = new Player(ePlayerId.Player1, i_player1Sign);
             ePlayerId player2Type;
             if (i_totalHumanPlayers == 2)
             {
@@ -24,11 +26,13 @@ namespace ReversedTicTacToe
             {
                 player2Type = ePlayerId.Computer;
             }
-            m_Player2 = new Player(player2Type, player2Sign);
+            m_Player2 = new Player(player2Type, i_player2Sign);
             m_GameBoard = new GameBoard(i_boardSize);
+            m_CurrentTurn = ePlayerId.Player1;
+            m_totalHumanPlayers = i_totalHumanPlayers;
         }
 
-        public void playTurn(Player currentPlayer)
+        public void playTurn(Tuple<int, int> chosenMove = default)
         {
 
         }
@@ -38,10 +42,10 @@ namespace ReversedTicTacToe
             int result = k_NotFound;
             bool isCombinationFound;
 
-            for (int i = 0; i < m_GameBoard.BoardSize; i++)
+            for (int i = 0; i < m_GameBoard.TotalRows; i++)
             {
                 isCombinationFound = true;
-                for (int j = 0; j < m_GameBoard.BoardSize - 1; j++)
+                for (int j = 0; j < m_GameBoard.TotalCols - 1; j++)
                 {
                     if (m_GameBoard.Board[i, j] != m_GameBoard.Board[i, j + 1])
                     {
@@ -60,15 +64,66 @@ namespace ReversedTicTacToe
             return result;
         }
 
+        public int GetTotalRows()
+        {
+            return m_GameBoard.TotalRows;
+        }
+
+        public int GetTotalCols()
+        {
+            return m_GameBoard.TotalCols;
+        }
+
+        public void setCoordinateForCurrentPlayer(int i_X, int i_Y)
+        {
+            if(CurrentTurn==ePlayerId.Player1)
+            {
+                m_Player1.ChosenMove = new Tuple<int, int>(i_X, i_Y);
+            }
+            else
+            {
+                m_Player2.ChosenMove = new Tuple<int, int>(i_X, i_Y);
+            }
+        }
+
+        public ePlayerId CurrentTurn
+        {
+            get { return m_CurrentTurn; }
+            set { m_CurrentTurn = value; }
+        }
+
+        public void nextTurn()
+        {
+            ePlayerId opponent;
+
+            if (this.CurrentTurn == ePlayerId.Player1)
+            {
+                if (this.m_totalHumanPlayers > 1)
+                {
+                    opponent = ePlayerId.Player2;
+                }
+                else
+                {
+                    opponent = ePlayerId.Computer;
+                }
+                this.CurrentTurn = opponent;
+            }
+            else
+            {
+                this.CurrentTurn = ePlayerId.Player1;
+            }
+        }
+
+
         public int CheckCols()
         {
             int result = k_NotFound;
             bool isCombinationFound;
 
-            for (int j = 0; j < m_GameBoard.BoardSize; j++)
+            for (int j = 0; j < m_GameBoard.TotalRows; j++)
             {
                 isCombinationFound = true;
-                for (int i = 0; i < m_GameBoard.BoardSize - 1; i++)
+                for (int i = 0; i < m_GameBoard.TotalCols - 1; i++)
                 {
                     if (m_GameBoard.Board[i, j] != m_GameBoard.Board[i + 1, j])
                     {
@@ -93,7 +148,7 @@ namespace ReversedTicTacToe
             int result = k_NotFound;
             bool isCombinationFound = true;
 
-            for (int i = 0; i < m_GameBoard.BoardSize - 1; i++)
+            for (int i = 0; i < m_GameBoard.TotalRows - 1; i++)
             {
                 isCombinationFound = true;
                 if(m_GameBoard.Board[i, i] != m_GameBoard.Board[i+1, i+1])
@@ -110,11 +165,11 @@ namespace ReversedTicTacToe
             }
             else
             {
-                for(int i = 0; i < m_GameBoard.BoardSize - 1; i++)
+                for(int i = 0; i < m_GameBoard.TotalRows - 1; i++)
                 {
                     isCombinationFound = true;
-                    if(m_GameBoard.Board[i, m_GameBoard.BoardSize - 1 - i] 
-                      != m_GameBoard.Board[i, m_GameBoard.BoardSize - 2 - i])
+                    if(m_GameBoard.Board[i, m_GameBoard.TotalCols - 1 - i] 
+                      != m_GameBoard.Board[i, m_GameBoard.TotalCols - 2 - i])
                     {
                         isCombinationFound = false;
                         break;
@@ -123,7 +178,7 @@ namespace ReversedTicTacToe
 
                 if (isCombinationFound)
                 {
-                    result = m_GameBoard.BoardSize - 1;/*second loop is the condition of right diagonal
+                    result = m_GameBoard.TotalCols - 1;/*second loop is the condition of right diagonal
                                                      starts with column size -1, ends with 0*/
                 }
             }
@@ -131,48 +186,64 @@ namespace ReversedTicTacToe
             return result;
         }
 
-        public string isGameOver()
+        public eBoardValue getBoardValueInCoordinates(int i_X, int i_Y)
+        {
+            return m_GameBoard.GetValueInPosition(i_X, i_Y);
+        }
+
+        public bool isGameOver()
         {
             int losingCombinationRow, losingCombinationCol, losingCombinationDiagonal;
-            string whoLost;
+            bool gameOver=false;
             losingCombinationRow = CheckRows();
             losingCombinationCol = CheckCols();
             losingCombinationDiagonal = CheckDiagonals();
             eBoardValue losingSign;
             ePlayerSign player1Sign = m_Player1.ChosenSign;
-            ePlayerSign player2Sign = m_Player2.ChosenSign;
 
-            if(losingCombinationRow != k_NotFound)
+            if(losingCombinationRow != k_NotFound || losingCombinationCol != k_NotFound
+                ||losingCombinationDiagonal != k_NotFound)
             {
-                losingSign = m_GameBoard.Board[losingCombinationRow, 0];
-                if((char)losingSign == (char)player1Sign)
+                if(losingCombinationRow != k_NotFound)
                 {
-                    whoLost = "player1";
+                    losingSign = m_GameBoard.Board[losingCombinationRow, 0];
+                }
+                else if(losingCombinationCol != k_NotFound)
+                {
+                    losingSign = m_GameBoard.Board[0, losingCombinationCol];
                 }
                 else
                 {
-                    whoLost = "player2/cpu";
+                    losingSign = m_GameBoard.Board[0, losingCombinationDiagonal];
                 }
-                
-
+                if((char)losingSign == (char)player1Sign)
+                {
+                    pointsAdding("player2");
+                }
+                else
+                {
+                    pointsAdding("player1");
+                }
+                gameOver = true;
             }
-            else if(losingCombinationCol != k_NotFound)
+            else if(m_GameBoard.FreeCells == 0) //tie
             {
-                losingSign = m_GameBoard.Board[0, losingCombinationCol];
-                if(losingSign == m_Player1.ChosenSign)
+                gameOver = true;
             }
-            else if(losingCombinationDiagonal != k_NotFound)
+
+            return gameOver;
+        }
+
+        private void pointsAdding(string i_WhoWon)
+        {
+            if (i_WhoWon == "player1")
             {
-                losingSign = m_GameBoard.Board[0, losingCombinationDiagonal];
+                m_Player1.Score++;
             }
-            else if(m_GameBoard.FreeCells == 0)
+            else
             {
-                whoLost = "nobody";
+                m_Player2.Score++;
             }
-
-
-
-            return result;
         }
     }
 }

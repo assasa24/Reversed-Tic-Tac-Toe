@@ -14,19 +14,19 @@ namespace ReversedTicTacToe
 
     class GameBoard
     {
-        private int m_BoardSize;
+        private int m_TotalRows,m_TotalCols;
         private eBoardValue[,] m_Board;
         private int m_FreeCells;
 
 
         public GameBoard(int i_BoardSize)
         {
-            this.m_BoardSize = i_BoardSize;
-            this.m_FreeCells = m_BoardSize * m_BoardSize;
-            this.m_Board = new eBoardValue[m_BoardSize, m_BoardSize];
-            for (int i = 0; i < m_BoardSize; i++)
+            this.m_TotalRows = m_TotalCols = i_BoardSize;
+            this.m_FreeCells = m_TotalRows * m_TotalCols;
+            this.m_Board = new eBoardValue[m_TotalRows, m_TotalCols];
+            for (int i = 0; i < m_TotalRows; i++)
             {
-                for (int j = 0; j < m_BoardSize; j++)
+                for (int j = 0; j < m_TotalCols; j++)
                 {
                     this.m_Board[i, j] = eBoardValue.Empty;
                 }
@@ -40,10 +40,15 @@ namespace ReversedTicTacToe
             set { m_FreeCells = value; }
         }
 
-        public int BoardSize
+        public int TotalRows
         {
-            get { return m_BoardSize; }
-            set { m_BoardSize = value; }
+            get { return m_TotalRows; }
+            set { m_TotalRows = value; }
+        }
+        public int TotalCols
+        {
+            get { return m_TotalCols; }
+            set { m_TotalCols = value; }
         }
 
         public eBoardValue[,] Board
@@ -65,22 +70,5 @@ namespace ReversedTicTacToe
         {
             return m_Board[i_X, i_Y];
         }
-
-        public bool CheckIfGameOVer()
-        {
-            bool result = false;
-
-            for(int i = 0; i < this.m_BoardSize; i++)
-            {
-                for(int j = 0; j < this.m_BoardSize - 1; j++)
-                {
-                    if()
-                }
-            }
-        }
-
-       
     }
-
-    
 }

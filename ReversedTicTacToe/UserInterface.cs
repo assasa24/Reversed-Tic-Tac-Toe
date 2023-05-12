@@ -8,6 +8,7 @@ namespace ReversedTicTacToe
     class UserInterface
     {
         private GameEngine m_GameEngine;
+        private bool m_QuitGame;
         
         public void GameInit()
         {
@@ -72,11 +73,13 @@ namespace ReversedTicTacToe
 
         public void PrintBoardToScreen() 
         {
-            for (int i = 0; i < BOARDROWS; i++)
+            int totalRows = m_GameEngine.GetTotalRows(), totalCols = m_GameEngine.GetTotalCols();
+
+            for (int i = 0; i < totalRows; i++)
             {
-                for (int j = 0; j < BOARDCOLS; j++)
+                for (int j = 0; j < totalCols; j++)
                 {
-                    printMatrixCell(m_GameEngine.getBoardValueInPosition(i,j));
+                    printMatrixCell(m_GameEngine.getBoardValueInCoordinates(i,j));
                 }
             }
         }
@@ -97,51 +100,82 @@ namespace ReversedTicTacToe
             }
         }
 
-        private void chooseMove(out Tuple<int, int> chosenMove)
+        private void chooseMove()
         {
             int x, y;
 
-            Console.WriteLine("Please choose your next turn in a 'row' + enter key + 'column' manner");
-            Console.WriteLine("For example: type '1', enter key, '2' for choosing the cell in row 1, col 2");
-            
-            x = coordinateValidator();
-            y = coordinateValidator();
+            if (m_GameEngine.CurrentTurn != ePlayerId.Computer)
+            {
+                if (m_GameEngine.CurrentTurn == ePlayerId.Player1)
+                {
+                    Console.WriteLine("It's Player1's turn.");
+                }
+                else
+                {
+                    Console.WriteLine("It's Player2's turn.");
+                }
 
-            chosenMove = new Tuple<int, int>(x, y);
+                Console.WriteLine("Please choose your next turn in a 'row' + space key + 'column' manner");
+                Console.WriteLine("For example: type '1', ' ', '2' for choosing the cell in row 1, col 2");
+
+                coordinateValidator(out x, out y);
+
+                m_GameEngine.setCoordinateForCurrentPlayer(x,y);
+            }
         }
 
-        private int coordinateValidator()
+        private void coordinateValidator(out int x, out int y)
         {
-            int coordinate;
-
-            while ((!int.TryParse(Console.ReadLine(), out coordinate)) || coordinate < 1 || coordinate > ROWSIZE)
+            bool isInputValid = false;
+            string coordinates;
+            int totalRows = m_GameEngine.GetTotalRows();
+            int totalCols = m_GameEngine.GetTotalCols();
+            x = 0;
+            y = 0;
+            while (!isInputValid)
             {
-                Console.WriteLine("Invalid coordinate. Make sure you are typing accordingly!");
-                Console.ResetInputBuffer();
+                coordinates = Console.ReadLine();
+                string[] numbers = coordinates.Split(' ');
+                if(numbers[0]=="Q" || numbers[0] == "q")
+                {
+                    m_QuitGame = true;
+                    break;
+                }
+                if(int.TryParse(numbers[0], out x) && int.TryParse(numbers[1], out y))
+                {
+                    if (!(x >= 0 && x < totalRows && y >=0 && y <= totalCols ))
+                    {
+                        isInputValid = true;
+                    }
+                }
+                if(!isInputValid)
+                {
+                    Console.WriteLine("Invalid coordinates! Please stick to the format: 'row' + space key + 'column'");
+                }
             }
-
-            return coordinate;
         }
 
         public void PlayGame()
         {
-            Tuple<int,int> chosenMove;
-
             GameInit();
             PrintBoardToScreen();
-
             do
             {
-                if (currentTurn != ePlayerId.Computer)
+                do
                 {
-                    chooseMove(out chosenMove);
+                    chooseMove();
+                    if(m_QuitGame)
+                    {
+                        break;
+                    }
+                    m_GameEngine.playTurn();
+                    Ex02.ConsoleUtils.Screen.Clear();
+                    PrintBoardToScreen();
+                    m_GameEngine.nextTurn();
                 }
-                m_GameEngine.playTurn(chosenMove);
-                Ex02.ConsoleUtils.Screen.Clear();
-                PrintBoardToScreen();
-                m_GameEngine.nextTurn();
+                while (!m_GameEngine.isGameOver());
             }
-            while (!m_GameEngine.isGameOver());
+            while (!stopGame());
         }
     }
 }
