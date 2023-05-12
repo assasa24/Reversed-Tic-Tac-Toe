@@ -177,10 +177,33 @@ namespace ReversedTicTacToe
                     Ex02.ConsoleUtils.Screen.Clear();
                     PrintBoardToScreen();
                     m_GameEngine.nextTurn();
+                    Ex02.ConsoleUtils.Screen.Clear();
                 }
                 while (!m_GameEngine.isGameOver());
             }
             while (!stopGame());
         }
-    }
+
+        private bool stopGame()
+        {
+            char playerFinalChoice;
+            Console.WriteLine("Game over. Please choose:");
+            Console.WriteLine("1. Play again: 'y'");
+            Console.WriteLine("2. Quit: 'Q'");
+            validatePlayerFinalChoice(out playerFinalChoice);
+
+        }
+
+        private void validatePlayerFinalChoice(out char playerFinalChoice)
+        {
+            bool isValidInput = char.TryParse(Console.ReadLine(), out playerFinalChoice);
+            while(!isValidInput || (playerFinalChoice != 'y' && playerFinalChoice != 'Y'
+                && playerFinalChoice != 'q' && playerFinalChoice != 'Q')
+            {
+                Console.WriteLine("Invalid choice. Enter choice again");
+                playerFinalChoice = char.TryParse(Console.ReadLine())
+            }
+                
+        
+        }
 }
