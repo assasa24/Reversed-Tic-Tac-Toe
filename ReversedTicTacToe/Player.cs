@@ -21,7 +21,6 @@ namespace ReversedTicTacToe
     {
         private ePlayerId m_PlayerId;
         private int m_Score;
-        private bool m_IsPlayersTurn;
         private ePlayerSign m_ChosenSign;
 
         public Player(ePlayerId i_PlayerId, ePlayerSign i_ChosenSign)
