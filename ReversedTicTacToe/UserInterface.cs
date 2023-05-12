@@ -141,14 +141,19 @@ namespace ReversedTicTacToe
                     m_QuitGame = true;
                     break;
                 }
-                if(int.TryParse(numbers[0], out x) && int.TryParse(numbers[1], out y))
+                if(int.TryParse(numbers[0], out x) && int.TryParse(numbers[1], out y)
+                    && (x >= 0 && x < totalRows && y >= 0 && y <= totalCols))
                 {
-                    if (!(x >= 0 && x < totalRows && y >=0 && y <= totalCols ))
+                    if(m_GameEngine.getBoardValueInCoordinates(x,y)==eBoardValue.Empty)
+                    {
+                        Console.WriteLine("occupied cell! please choose again");
+                    }
+                    else
                     {
                         isInputValid = true;
                     }
                 }
-                if(!isInputValid)
+                else
                 {
                     Console.WriteLine("Invalid coordinates! Please stick to the format: 'row' + space key + 'column'");
                 }

@@ -32,9 +32,20 @@ namespace ReversedTicTacToe
             m_totalHumanPlayers = i_totalHumanPlayers;
         }
 
-        public void playTurn(Tuple<int, int> chosenMove = default)
+        public void playTurn()
         {
+            if(m_CurrentTurn == ePlayerId.Player1)
+            {
+                m_GameBoard.SetValueInBoard();
+            }
+            else if(m_CurrentTurn == ePlayerId.Player2)
+            {
+                m_GameBoard.SetValueInBoard();
+            }
+            else
+            {
 
+            }
         }
 
         public int CheckRows()
