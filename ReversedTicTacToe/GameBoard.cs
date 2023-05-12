@@ -7,9 +7,9 @@ namespace ReversedTicTacToe
 {
     public enum eBoardValue
     {
-        X,
-        O,
-        Empty
+        X = 'X',
+        O = 'O',
+        Empty = ' '
     }
 
     class GameBoard
