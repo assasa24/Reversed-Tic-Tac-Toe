@@ -11,7 +11,7 @@ namespace ReversedTicTacToe
         
         public void GameInit()
         {
-            Console.WriteLine("Hi. Welcome to a reversed tic tac toe game");
+            Console.WriteLine("Hi! Welcome to Reversed Tic Tac Toe");
             Console.WriteLine("Please choose your board size.");
             int boardSize = boardSizeValidator();
 
@@ -97,15 +97,22 @@ namespace ReversedTicTacToe
             }
         }
 
+        private void chooseMove()
+        {
+
+        }
+
         public void PlayGame()
         {
             GameInit();
 
-            while(!m_GameEngine.isGameOver())
+            PrintBoardToScreen();
+
+            do
             {
-
+                m_GameEngine.playTurn();
             }
-
+            while (!m_GameEngine.isGameOver());
         }
     }
 }
