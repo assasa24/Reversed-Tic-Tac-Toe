@@ -9,7 +9,7 @@ namespace ReversedTicTacToe
     {
         private GameEngine m_GameEngine;
         private bool m_QuitGame;
-        
+
         public void GameInit()
         {
             Console.WriteLine("Hi! Welcome to Reversed Tic Tac Toe");
@@ -32,12 +32,12 @@ namespace ReversedTicTacToe
             char chosenSign;
 
             while (!(char.TryParse(Console.ReadLine(), out chosenSign) && (chosenSign == 'x' ||
-                chosenSign == 'X' || chosenSign == 'O' || chosenSign =='o')))
+                chosenSign == 'X' || chosenSign == 'O' || chosenSign == 'o')))
             {
                 Console.WriteLine("invalid sign. try again");
             }
 
-            if(chosenSign == 'X' || chosenSign == 'x')
+            if (chosenSign == 'X' || chosenSign == 'x')
             {
                 player1Sign = ePlayerSign.X;
                 player2Sign = ePlayerSign.O;
@@ -60,10 +60,10 @@ namespace ReversedTicTacToe
             return boardSize;
         }
 
-        private int totalPlayersValidator() 
+        private int totalPlayersValidator()
         {
             int totalHumanPlayers;
-            while ((!int.TryParse(Console.ReadLine(), out totalHumanPlayers)) || totalHumanPlayers < 1 || totalHumanPlayers>2)
+            while ((!int.TryParse(Console.ReadLine(), out totalHumanPlayers)) || totalHumanPlayers < 1 || totalHumanPlayers > 2)
             {
                 Console.WriteLine("invalid number. try again");
             }
@@ -71,32 +71,51 @@ namespace ReversedTicTacToe
             return totalHumanPlayers;
         }
 
-        public void PrintBoardToScreen() 
+        public void PrintBoardToScreen()
         {
             int totalRows = m_GameEngine.GetTotalRows(), totalCols = m_GameEngine.GetTotalCols();
+            for(int j = 0; j < m_GameEngine.GetTotalCols(); j++)
+            {
+                if(j == 0)
+                {
+                    Console.Write("      " + j.ToString() + "  ");
+                }
+                else
+                { 
+                    Console.Write(" " + j.ToString() + "  "); 
+                }
+                
+            }
+
+            Console.WriteLine();
 
             for (int i = 0; i < totalRows; i++)
             {
+                Console.Write(" "+ i.ToString() +" ");
                 for (int j = 0; j < totalCols; j++)
                 {
-                    printMatrixCell(m_GameEngine.getBoardValueInCoordinates(i,j));
+                    Console.Write(" | ");
+                    printMatrixCell(m_GameEngine.getBoardValueInCoordinates(i, j));
                 }
+                Console.WriteLine();
             }
+            
+
         }
 
         private void printMatrixCell(eBoardValue cell)
         {
             if (cell == eBoardValue.Empty)
             {
-                Console.WriteLine(" ");
+                Console.Write(" ");
             }
             else if (cell == eBoardValue.O)
             {
-                Console.WriteLine("O");
+                Console.Write("O");
             }
             else
             {
-                Console.WriteLine("X");
+                Console.Write("X");
             }
         }
 
@@ -104,9 +123,9 @@ namespace ReversedTicTacToe
         {
             int x, y;
 
-            if (m_GameEngine.CurrentTurn != ePlayerId.Computer)
+            if (m_GameEngine.CurrentTurn != ePlayerType.Computer)
             {
-                if (m_GameEngine.CurrentTurn == ePlayerId.Player1)
+                if (m_GameEngine.CurrentTurn == ePlayerType.HumanPlayerA)
                 {
                     Console.WriteLine("It's Player1's turn.");
                 }
@@ -120,7 +139,7 @@ namespace ReversedTicTacToe
 
                 coordinateValidator(out x, out y);
 
-                m_GameEngine.setCoordinateForCurrentPlayer(x,y);
+                m_GameEngine.setCoordinateForCurrentPlayer(x, y);
             }
         }
 
@@ -136,15 +155,15 @@ namespace ReversedTicTacToe
             {
                 coordinates = Console.ReadLine();
                 string[] numbers = coordinates.Split(' ');
-                if(numbers[0]=="Q" || numbers[0] == "q")
+                if (numbers[0] == "Q" || numbers[0] == "q")
                 {
                     m_QuitGame = true;
                     break;
                 }
-                if(int.TryParse(numbers[0], out x) && int.TryParse(numbers[1], out y)
-                    && (x >= 0 && x < totalRows && y >= 0 && y <= totalCols))
+                if (int.TryParse(numbers[0], out x) && int.TryParse(numbers[1], out y)
+                    && (x >= 0 && x < totalRows && y >= 0 && y < totalCols))
                 {
-                    if(m_GameEngine.getBoardValueInCoordinates(x,y)==eBoardValue.Empty)
+                    if (m_GameEngine.getBoardValueInCoordinates(x, y) != eBoardValue.Empty)
                     {
                         Console.WriteLine("occupied cell! please choose again");
                     }
@@ -169,7 +188,7 @@ namespace ReversedTicTacToe
                 do
                 {
                     chooseMove();
-                    if(m_QuitGame)
+                    if (m_QuitGame)
                     {
                         break;
                     }
@@ -177,33 +196,44 @@ namespace ReversedTicTacToe
                     Ex02.ConsoleUtils.Screen.Clear();
                     PrintBoardToScreen();
                     m_GameEngine.nextTurn();
-                    Ex02.ConsoleUtils.Screen.Clear();
                 }
                 while (!m_GameEngine.isGameOver());
             }
-            while (!stopGame());
+            while (!checkIfAnotherGame());
         }
 
-        private bool stopGame()
+        private bool checkIfAnotherGame()
         {
+            bool anotherGame = false;
             char playerFinalChoice;
             Console.WriteLine("Game over. Please choose:");
-            Console.WriteLine("1. Play again: 'y'");
+            Console.WriteLine("1. Play again: 'Y'");
             Console.WriteLine("2. Quit: 'Q'");
             validatePlayerFinalChoice(out playerFinalChoice);
+            if (playerFinalChoice == 'y' || playerFinalChoice == 'Y')
+            {
+                m_QuitGame = false;
+                m_GameEngine.cleanBoard();
+                m_GameEngine.CurrentTurn = ePlayerType.HumanPlayerA;
+                anotherGame = false;
+            }
+            else
+            {
+                anotherGame = true;
+            }
 
+            return anotherGame;
         }
 
         private void validatePlayerFinalChoice(out char playerFinalChoice)
         {
             bool isValidInput = char.TryParse(Console.ReadLine(), out playerFinalChoice);
-            while(!isValidInput || (playerFinalChoice != 'y' && playerFinalChoice != 'Y'
-                && playerFinalChoice != 'q' && playerFinalChoice != 'Q')
+            while (!isValidInput || (playerFinalChoice != 'y' && playerFinalChoice != 'Y'
+                && playerFinalChoice != 'q' && playerFinalChoice != 'Q'))
             {
                 Console.WriteLine("Invalid choice. Enter choice again");
-                playerFinalChoice = char.TryParse(Console.ReadLine())
+                isValidInput = char.TryParse(Console.ReadLine(), out playerFinalChoice);
             }
-                
-        
         }
+    }
 }

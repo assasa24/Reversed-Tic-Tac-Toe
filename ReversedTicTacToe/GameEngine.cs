@@ -11,42 +11,48 @@ namespace ReversedTicTacToe
         private Player m_Player2;
         private GameBoard m_GameBoard;
         private const int k_NotFound = -1;
-        private ePlayerId m_CurrentTurn;
+        private ePlayerType m_CurrentTurn;
         private int m_totalHumanPlayers;
+        Random m_Random;
 
         public GameEngine(int i_boardSize, int i_totalHumanPlayers, ePlayerSign i_player1Sign, ePlayerSign i_player2Sign)
         {
-            m_Player1 = new Player(ePlayerId.Player1, i_player1Sign);
-            ePlayerId player2Type;
+            m_Player1 = new Player(ePlayerType.HumanPlayerA, i_player1Sign);
+            ePlayerType player2Type;
             if (i_totalHumanPlayers == 2)
             {
-                player2Type = ePlayerId.Player2;
+                player2Type = ePlayerType.HumanPlayerB;
             }
             else
             {
-                Random random = new Random();
-                player2Type = ePlayerId.Computer;
+                m_Random = new Random();
+                player2Type = ePlayerType.Computer;
             }
             m_Player2 = new Player(player2Type, i_player2Sign);
             m_GameBoard = new GameBoard(i_boardSize);
-            m_CurrentTurn = ePlayerId.Player1;
+            m_CurrentTurn = ePlayerType.HumanPlayerA;
             m_totalHumanPlayers = i_totalHumanPlayers;
+        }
+
+        public void cleanBoard()
+        {
+            m_GameBoard.cleanBoard();
         }
 
         public void playTurn()
         {
-            if(m_CurrentTurn == ePlayerId.Player1)
+            if(m_CurrentTurn == ePlayerType.HumanPlayerA)
             {
-                m_GameBoard.SetValueInBoard(m_Player1.ChosenMove.Item1,m_Player1.ChosenMove.Item2,m_Player1.ChosenSign);
+                m_GameBoard.SetPlayerSignInBoard(m_Player1.ChosenMove.Item1,m_Player1.ChosenMove.Item2,m_Player1.ChosenSign);
             }
             else 
             {
-                if(m_CurrentTurn == ePlayerId.Computer)
+                if(m_CurrentTurn == ePlayerType.Computer)
                 {
-                    int randX = Random.next(m_GameBoard.TotalRows+1), randY= Random.next(m_GameBoard.TotalCols+1);
+                    int randX = m_Random.Next(m_GameBoard.TotalRows+1), randY = m_Random.Next(m_GameBoard.TotalCols+1);
                     m_Player2.ChosenMove = new Tuple<int, int>(randX, randY);
                 }
-                m_GameBoard.SetValueInBoard(m_Player2.ChosenMove.Item1,m_Player2.ChosenMove.Item2,m_Player2.ChosenSign);
+                m_GameBoard.SetPlayerSignInBoard(m_Player2.ChosenMove.Item1,m_Player2.ChosenMove.Item2,m_Player2.ChosenSign);
             }
         }
 
@@ -89,7 +95,7 @@ namespace ReversedTicTacToe
 
         public void setCoordinateForCurrentPlayer(int i_X, int i_Y)
         {
-            if(CurrentTurn==ePlayerId.Player1)
+            if(CurrentTurn==ePlayerType.HumanPlayerA)
             {
                 m_Player1.ChosenMove = new Tuple<int, int>(i_X, i_Y);
             }
@@ -99,7 +105,7 @@ namespace ReversedTicTacToe
             }
         }
 
-        public ePlayerId CurrentTurn
+        public ePlayerType CurrentTurn
         {
             get { return m_CurrentTurn; }
             set { m_CurrentTurn = value; }
@@ -107,23 +113,23 @@ namespace ReversedTicTacToe
 
         public void nextTurn()
         {
-            ePlayerId opponent;
+            ePlayerType opponent;
 
-            if (this.CurrentTurn == ePlayerId.Player1)
+            if (this.CurrentTurn == ePlayerType.HumanPlayerA)
             {
                 if (this.m_totalHumanPlayers > 1)
                 {
-                    opponent = ePlayerId.Player2;
+                    opponent = ePlayerType.HumanPlayerB;
                 }
                 else
                 {
-                    opponent = ePlayerId.Computer;
+                    opponent = ePlayerType.Computer;
                 }
                 this.CurrentTurn = opponent;
             }
             else
             {
-                this.CurrentTurn = ePlayerId.Player1;
+                this.CurrentTurn = ePlayerType.HumanPlayerA;
             }
         }
 
@@ -173,8 +179,9 @@ namespace ReversedTicTacToe
 
             if(isCombinationFound)
             {
-                result = 0;/*first loop is the condition of left diagonal.
-                             starts with 0. ends with bottom right*/
+                result = 0;
+                //first loop is the condition of left diagonal.
+                //starts with 0. ends with bottom right*/
             }
             else
             {
@@ -191,8 +198,9 @@ namespace ReversedTicTacToe
 
                 if (isCombinationFound)
                 {
-                    result = m_GameBoard.TotalCols - 1;/*second loop is the condition of right diagonal
-                                                     starts with column size -1, ends with 0*/
+                    result = m_GameBoard.TotalCols - 1;
+                    //second loop is the condition of right diagonal
+                    //starts with column size -1, ends with 0*/
                 }
             }
 
