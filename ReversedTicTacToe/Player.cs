@@ -5,11 +5,11 @@ using System.Text;
 
 namespace ReversedTicTacToe
 {
-    public enum ePlayerId
+    public enum ePlayerType
     {
         Computer,
-        Player1,
-        Player2
+        HumanPlayerA,
+        HumanPlayerB
     }
     public enum ePlayerSign
     {

@@ -24,6 +24,7 @@ namespace ReversedTicTacToe
             }
             else
             {
+                Random random = new Random();
                 player2Type = ePlayerId.Computer;
             }
             m_Player2 = new Player(player2Type, i_player2Sign);
@@ -36,15 +37,16 @@ namespace ReversedTicTacToe
         {
             if(m_CurrentTurn == ePlayerId.Player1)
             {
-                m_GameBoard.SetValueInBoard();
+                m_GameBoard.SetValueInBoard(m_Player1.ChosenMove.Item1,m_Player1.ChosenMove.Item2,m_Player1.ChosenSign);
             }
-            else if(m_CurrentTurn == ePlayerId.Player2)
+            else 
             {
-                m_GameBoard.SetValueInBoard();
-            }
-            else
-            {
-
+                if(m_CurrentTurn == ePlayerId.Computer)
+                {
+                    int randX = Random.next(m_GameBoard.TotalRows+1), randY= Random.next(m_GameBoard.TotalCols+1);
+                    m_Player2.ChosenMove = new Tuple<int, int>(randX, randY);
+                }
+                m_GameBoard.SetValueInBoard(m_Player2.ChosenMove.Item1,m_Player2.ChosenMove.Item2,m_Player2.ChosenSign);
             }
         }
 
