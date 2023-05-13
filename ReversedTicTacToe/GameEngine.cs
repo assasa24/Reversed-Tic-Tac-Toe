@@ -49,7 +49,8 @@ namespace ReversedTicTacToe
             {
                 if(m_CurrentTurn == ePlayerType.Computer)
                 {
-                    int randX = m_Random.Next(m_GameBoard.TotalRows+1), randY = m_Random.Next(m_GameBoard.TotalCols+1);
+                    int randX = m_Random.Next(m_GameBoard.TotalRows), randY = m_Random.Next(m_GameBoard.TotalCols);
+
                     m_Player2.ChosenMove = new Tuple<int, int>(randX, randY);
                 }
                 m_GameBoard.SetPlayerSignInBoard(m_Player2.ChosenMove.Item1,m_Player2.ChosenMove.Item2,m_Player2.ChosenSign);
@@ -60,12 +61,19 @@ namespace ReversedTicTacToe
         {
             int result = k_NotFound;
             bool isCombinationFound;
+            
 
             for (int i = 0; i < m_GameBoard.TotalRows; i++)
             {
                 isCombinationFound = true;
                 for (int j = 0; j < m_GameBoard.TotalCols - 1; j++)
                 {
+                    if(m_GameBoard.Board[i, j] == eBoardValue.Empty)
+                    {
+                        isCombinationFound = false;
+                        break;
+                        
+                    }
                     if (m_GameBoard.Board[i, j] != m_GameBoard.Board[i, j + 1])
                     {
                         isCombinationFound = false;
@@ -144,6 +152,11 @@ namespace ReversedTicTacToe
                 isCombinationFound = true;
                 for (int i = 0; i < m_GameBoard.TotalCols - 1; i++)
                 {
+                    if (m_GameBoard.Board[i, j] == eBoardValue.Empty)
+                    {
+                        isCombinationFound = false;
+                        break;
+                    }
                     if (m_GameBoard.Board[i, j] != m_GameBoard.Board[i + 1, j])
                     {
                         isCombinationFound = false;
@@ -170,7 +183,12 @@ namespace ReversedTicTacToe
             for (int i = 0; i < m_GameBoard.TotalRows - 1; i++)
             {
                 isCombinationFound = true;
-                if(m_GameBoard.Board[i, i] != m_GameBoard.Board[i+1, i+1])
+                if (m_GameBoard.Board[i, i] == eBoardValue.Empty)
+                {
+                    isCombinationFound = false;
+                    break;
+                }
+                if (m_GameBoard.Board[i, i] != m_GameBoard.Board[i+1, i+1])
                 {
                     isCombinationFound = false;
                     break;
@@ -188,7 +206,13 @@ namespace ReversedTicTacToe
                 for(int i = 0; i < m_GameBoard.TotalRows - 1; i++)
                 {
                     isCombinationFound = true;
-                    if(m_GameBoard.Board[i, m_GameBoard.TotalCols - 1 - i] 
+                    if (m_GameBoard.Board[i, m_GameBoard.TotalCols - 1 - i] == eBoardValue.Empty)
+                    {
+                        isCombinationFound = false;
+                        break;
+                    }
+
+                    if (m_GameBoard.Board[i, m_GameBoard.TotalCols - 1 - i] 
                       != m_GameBoard.Board[i, m_GameBoard.TotalCols - 2 - i])
                     {
                         isCombinationFound = false;
