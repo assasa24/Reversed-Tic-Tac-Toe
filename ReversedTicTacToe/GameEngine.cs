@@ -34,12 +34,31 @@ namespace ReversedTicTacToe
             m_totalHumanPlayers = i_totalHumanPlayers;
         }
 
-        public void cleanBoard()
+        public Tuple<int,int> GetScore()
+        {
+            Tuple<int, int> score = new Tuple<int, int>(m_Player1.Score, m_Player2.Score);
+
+            return score;
+        }
+        public void ResetGame()
         {
             m_GameBoard.cleanBoard();
+            CurrentTurn = ePlayerType.HumanPlayerA;
         }
 
-        public void playTurn()
+        public void PlayerQuit()
+        {
+            if(m_CurrentTurn==ePlayerType.HumanPlayerA)
+            {
+                m_Player2.Score++;
+            }
+            else
+            {
+                m_Player1.Score++;
+            }
+        }
+
+        public void PlayTurn()
         {
             if(m_CurrentTurn == ePlayerType.HumanPlayerA)
             {
@@ -49,15 +68,21 @@ namespace ReversedTicTacToe
             {
                 if(m_CurrentTurn == ePlayerType.Computer)
                 {
-                    int randX = m_Random.Next(m_GameBoard.TotalRows), randY = m_Random.Next(m_GameBoard.TotalCols);
+                    int randX, randY;
 
+                    do
+                    {
+                        randX = m_Random.Next(m_GameBoard.TotalRows); 
+                        randY = m_Random.Next(m_GameBoard.TotalCols);
+                    }
+                    while (getBoardValueInCoordinates(randX, randY) != eBoardValue.Empty);
                     m_Player2.ChosenMove = new Tuple<int, int>(randX, randY);
                 }
                 m_GameBoard.SetPlayerSignInBoard(m_Player2.ChosenMove.Item1,m_Player2.ChosenMove.Item2,m_Player2.ChosenSign);
             }
         }
 
-        public int CheckRows()
+        private int checkRows()
         {
             int result = k_NotFound;
             bool isCombinationFound;
@@ -101,7 +126,7 @@ namespace ReversedTicTacToe
             return m_GameBoard.TotalCols;
         }
 
-        public void setCoordinateForCurrentPlayer(int i_X, int i_Y)
+        public void SetCoordinateForCurrentPlayer(int i_X, int i_Y)
         {
             if(CurrentTurn==ePlayerType.HumanPlayerA)
             {
@@ -119,7 +144,7 @@ namespace ReversedTicTacToe
             set { m_CurrentTurn = value; }
         }
 
-        public void nextTurn()
+        public void SwitchToNextPlayer()
         {
             ePlayerType opponent;
 
@@ -142,7 +167,7 @@ namespace ReversedTicTacToe
         }
 
 
-        public int CheckCols()
+        private int checkCols()
         {
             int result = k_NotFound;
             bool isCombinationFound;
@@ -175,7 +200,7 @@ namespace ReversedTicTacToe
             return result;
         }
 
-        public int CheckDiagonals()
+        private int checkDiagonals()
         {
             int result = k_NotFound;
             bool isCombinationFound = true;
@@ -236,13 +261,13 @@ namespace ReversedTicTacToe
             return m_GameBoard.GetValueInPosition(i_X, i_Y);
         }
 
-        public bool isGameOver()
+        public bool IsGameOver()
         {
             int losingCombinationRow, losingCombinationCol, losingCombinationDiagonal;
             bool gameOver=false;
-            losingCombinationRow = CheckRows();
-            losingCombinationCol = CheckCols();
-            losingCombinationDiagonal = CheckDiagonals();
+            losingCombinationRow = checkRows();
+            losingCombinationCol = checkCols();
+            losingCombinationDiagonal = checkDiagonals();
             eBoardValue losingSign;
             ePlayerSign player1Sign = m_Player1.ChosenSign;
 

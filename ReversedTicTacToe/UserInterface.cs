@@ -10,7 +10,7 @@ namespace ReversedTicTacToe
         private GameEngine m_GameEngine;
         private bool m_QuitGame;
 
-        public void GameInit()
+        private void gameInit()
         {
             Console.WriteLine("Hi! Welcome to Reversed Tic Tac Toe");
             Console.WriteLine("Please choose your board size.");
@@ -23,11 +23,11 @@ namespace ReversedTicTacToe
 
             Console.WriteLine("Choose sign: X or O");
             ePlayerSign player1Sign, player2Sign;
-            PlayerSignValidator(out player1Sign, out player2Sign);
+            playerSignValidator(out player1Sign, out player2Sign);
             m_GameEngine = new GameEngine(boardSize, totalHumanPlayers, player1Sign, player2Sign);
         }
 
-        private void PlayerSignValidator(out ePlayerSign player1Sign, out ePlayerSign player2Sign)
+        private void playerSignValidator(out ePlayerSign player1Sign, out ePlayerSign player2Sign)
         {
             char chosenSign;
 
@@ -71,7 +71,7 @@ namespace ReversedTicTacToe
             return totalHumanPlayers;
         }
 
-        public void PrintBoardToScreen()
+        private void printBoardToScreen()
         {
             int totalRows = m_GameEngine.GetTotalRows(), totalCols = m_GameEngine.GetTotalCols();
             for(int j = 0; j < m_GameEngine.GetTotalCols(); j++)
@@ -139,7 +139,7 @@ namespace ReversedTicTacToe
 
                 coordinateValidator(out x, out y);
 
-                m_GameEngine.setCoordinateForCurrentPlayer(x, y);
+                m_GameEngine.SetCoordinateForCurrentPlayer(x, y);
             }
         }
 
@@ -181,28 +181,37 @@ namespace ReversedTicTacToe
 
         public void PlayGame()
         {
-            GameInit();
-            PrintBoardToScreen();
+            gameInit();
             do
             {
+                printBoardToScreen();
                 do
                 {
                     chooseMove();
                     if (m_QuitGame)
                     {
+                        m_GameEngine.PlayerQuit();
                         break;
                     }
-                    m_GameEngine.playTurn();
+                    m_GameEngine.PlayTurn();
                     Ex02.ConsoleUtils.Screen.Clear();
-                    PrintBoardToScreen();
-                    m_GameEngine.nextTurn();
+                    printBoardToScreen();
+                    m_GameEngine.SwitchToNextPlayer();
                 }
-                while (!m_GameEngine.isGameOver());
+                while (!m_GameEngine.IsGameOver());
+                showScore();
             }
-            while (!checkIfAnotherGame());
+            while (checkForAnotherGame());
         }
 
-        private bool checkIfAnotherGame()
+        private void showScore()
+        {
+            Tuple<int, int> score = m_GameEngine.GetScore();
+            Console.WriteLine("Player 1's score:" + score.Item1 + " - " + "Player 2's score:" + score.Item2);
+            Console.WriteLine();
+        }
+
+        private bool checkForAnotherGame()
         {
             bool anotherGame = false;
             char playerFinalChoice;
@@ -213,13 +222,12 @@ namespace ReversedTicTacToe
             if (playerFinalChoice == 'y' || playerFinalChoice == 'Y')
             {
                 m_QuitGame = false;
-                m_GameEngine.cleanBoard();
-                m_GameEngine.CurrentTurn = ePlayerType.HumanPlayerA;
-                anotherGame = false;
+                m_GameEngine.ResetGame();
+                anotherGame = true;
             }
             else
             {
-                anotherGame = true;
+                anotherGame = false;
             }
 
             return anotherGame;

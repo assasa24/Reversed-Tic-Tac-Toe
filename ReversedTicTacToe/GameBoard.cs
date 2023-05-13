@@ -14,21 +14,21 @@ namespace ReversedTicTacToe
 
     class GameBoard
     {
-        private int m_TotalRows,m_TotalCols;
+        private int m_TotalRows;
+        private int m_TotalCols;
         private eBoardValue[,] m_Board;
         private int m_FreeCells;
-
 
         public GameBoard(int i_BoardSize)
         {
             this.m_TotalRows = m_TotalCols = i_BoardSize;
-            this.m_FreeCells = m_TotalRows * m_TotalCols;
             this.m_Board = new eBoardValue[m_TotalRows, m_TotalCols];
             cleanBoard();
         }
 
         public void cleanBoard()
         {
+            this.m_FreeCells = m_TotalRows * m_TotalCols;
             for (int i = 0; i < m_TotalRows; i++)
             {
                 for (int j = 0; j < m_TotalCols; j++)
