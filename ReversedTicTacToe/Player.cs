@@ -11,11 +11,13 @@ namespace ReversedTicTacToe
         HumanPlayerA,
         HumanPlayerB
     }
+
     public enum ePlayerSign
     {
         X = 'X',
         O = 'O'
     }
+
     class Player
     {
         private ePlayerType m_PlayerId;
@@ -33,26 +35,54 @@ namespace ReversedTicTacToe
 
         public ePlayerType PlayerId
         {
-            get { return m_PlayerId; }
-            set { m_PlayerId = value; }
+            get 
+            { 
+                return m_PlayerId;
+            }
+
+            set 
+            { 
+                m_PlayerId = value;
+            }
         }
 
         public Tuple<int, int> ChosenMove
         {
-            get { return m_ChosenMove; }
-            set { m_ChosenMove = value; }
+            get 
+            { 
+                return m_ChosenMove;
+            }
+
+            set 
+            { 
+                m_ChosenMove = value;
+            }
         }
 
         public int Score
         {
-            get { return m_Score; }
-            set { m_Score = value; }
+            get 
+            { 
+                return m_Score;
+            }
+
+            set 
+            { 
+                m_Score = value; 
+            }
         }
 
         public ePlayerSign ChosenSign
         {
-            get { return m_ChosenSign; }
-            set { m_ChosenSign = value; }
+            get 
+            { 
+                return m_ChosenSign;
+            }
+
+            set 
+            { 
+                m_ChosenSign = value;
+            }
         }
     }
 }

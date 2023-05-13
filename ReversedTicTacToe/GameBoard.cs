@@ -40,19 +40,41 @@ namespace ReversedTicTacToe
 
         public int FreeCells
         {
-            get { return m_FreeCells; }
-            set { m_FreeCells = value; }
+            get 
+            { 
+                return m_FreeCells; 
+            }
+
+            set 
+            {
+                m_FreeCells = value;
+            }
         }
 
         public int TotalRows
         {
-            get { return m_TotalRows; }
-            set { m_TotalRows = value; }
+            get 
+            { 
+                return m_TotalRows; 
+            }
+
+            set 
+            { 
+                m_TotalRows = value;
+            }
         }
+
         public int TotalCols
         {
-            get { return m_TotalCols; }
-            set { m_TotalCols = value; }
+            get
+            { 
+                return m_TotalCols;
+            }
+
+            set 
+            { 
+                m_TotalCols = value;
+            }
         }
 
         public eBoardValue[,] Board
@@ -66,6 +88,7 @@ namespace ReversedTicTacToe
         public void SetPlayerSignInBoard(int i_X, int i_Y, ePlayerSign i_PlayerSign)
         {
             eBoardValue valueToSetInBoard;
+
             if(i_PlayerSign == ePlayerSign.X)
             {
                 valueToSetInBoard = eBoardValue.X;
@@ -74,6 +97,7 @@ namespace ReversedTicTacToe
             {
                 valueToSetInBoard = eBoardValue.O;
             }
+
             SetValueInBoard(i_X, i_Y, valueToSetInBoard);
         }
 

@@ -19,6 +19,7 @@ namespace ReversedTicTacToe
         {
             m_Player1 = new Player(ePlayerType.HumanPlayerA, i_player1Sign);
             ePlayerType player2Type;
+
             if (i_totalHumanPlayers == 2)
             {
                 player2Type = ePlayerType.HumanPlayerB;
@@ -28,6 +29,7 @@ namespace ReversedTicTacToe
                 m_Random = new Random();
                 player2Type = ePlayerType.Computer;
             }
+
             m_Player2 = new Player(player2Type, i_player2Sign);
             m_GameBoard = new GameBoard(i_boardSize);
             m_CurrentTurn = ePlayerType.HumanPlayerA;
@@ -40,6 +42,7 @@ namespace ReversedTicTacToe
 
             return score;
         }
+
         public void ResetGame()
         {
             m_GameBoard.cleanBoard();
@@ -48,7 +51,7 @@ namespace ReversedTicTacToe
 
         public void PlayerQuit()
         {
-            if(m_CurrentTurn==ePlayerType.HumanPlayerA)
+            if(m_CurrentTurn == ePlayerType.HumanPlayerA)
             {
                 m_Player2.Score++;
             }
@@ -76,8 +79,10 @@ namespace ReversedTicTacToe
                         randY = m_Random.Next(m_GameBoard.TotalCols);
                     }
                     while (getBoardValueInCoordinates(randX, randY) != eBoardValue.Empty);
+
                     m_Player2.ChosenMove = new Tuple<int, int>(randX, randY);
                 }
+
                 m_GameBoard.SetPlayerSignInBoard(m_Player2.ChosenMove.Item1,m_Player2.ChosenMove.Item2,m_Player2.ChosenSign);
             }
         }
@@ -87,7 +92,6 @@ namespace ReversedTicTacToe
             int result = k_NotFound;
             bool isCombinationFound;
             
-
             for (int i = 0; i < m_GameBoard.TotalRows; i++)
             {
                 isCombinationFound = true;
@@ -99,6 +103,7 @@ namespace ReversedTicTacToe
                         break;
                         
                     }
+
                     if (m_GameBoard.Board[i, j] != m_GameBoard.Board[i, j + 1])
                     {
                         isCombinationFound = false;
@@ -128,7 +133,7 @@ namespace ReversedTicTacToe
 
         public void SetCoordinateForCurrentPlayer(int i_X, int i_Y)
         {
-            if(CurrentTurn==ePlayerType.HumanPlayerA)
+            if(CurrentTurn == ePlayerType.HumanPlayerA)
             {
                 m_Player1.ChosenMove = new Tuple<int, int>(i_X, i_Y);
             }
@@ -140,8 +145,15 @@ namespace ReversedTicTacToe
 
         public ePlayerType CurrentTurn
         {
-            get { return m_CurrentTurn; }
-            set { m_CurrentTurn = value; }
+            get 
+            { 
+                return m_CurrentTurn;
+            }
+
+            set 
+            { 
+                m_CurrentTurn = value; 
+            }
         }
 
         public void SwitchToNextPlayer()
@@ -158,6 +170,7 @@ namespace ReversedTicTacToe
                 {
                     opponent = ePlayerType.Computer;
                 }
+
                 this.CurrentTurn = opponent;
             }
             else
@@ -182,12 +195,12 @@ namespace ReversedTicTacToe
                         isCombinationFound = false;
                         break;
                     }
+
                     if (m_GameBoard.Board[i, j] != m_GameBoard.Board[i + 1, j])
                     {
                         isCombinationFound = false;
                         break;
                     }
-
                 }
 
                 if (isCombinationFound)
@@ -213,6 +226,7 @@ namespace ReversedTicTacToe
                     isCombinationFound = false;
                     break;
                 }
+
                 if (m_GameBoard.Board[i, i] != m_GameBoard.Board[i+1, i+1])
                 {
                     isCombinationFound = false;
@@ -224,7 +238,7 @@ namespace ReversedTicTacToe
             {
                 result = 0;
                 //first loop is the condition of left diagonal.
-                //starts with 0. ends with bottom right*/
+                //starts with 0. ends with bottom right
             }
             else
             {
@@ -249,7 +263,7 @@ namespace ReversedTicTacToe
                 {
                     result = m_GameBoard.TotalCols - 1;
                     //second loop is the condition of right diagonal
-                    //starts with column size -1, ends with 0*/
+                    //starts with column size -1, ends with 0
                 }
             }
 
@@ -264,7 +278,7 @@ namespace ReversedTicTacToe
         public bool IsGameOver()
         {
             int losingCombinationRow, losingCombinationCol, losingCombinationDiagonal;
-            bool gameOver=false;
+            bool gameOver = false;
             losingCombinationRow = checkRows();
             losingCombinationCol = checkCols();
             losingCombinationDiagonal = checkDiagonals();
@@ -286,6 +300,7 @@ namespace ReversedTicTacToe
                 {
                     losingSign = m_GameBoard.Board[0, losingCombinationDiagonal];
                 }
+
                 if((char)losingSign == (char)player1Sign)
                 {
                     pointsAdding("player2");
@@ -294,6 +309,7 @@ namespace ReversedTicTacToe
                 {
                     pointsAdding("player1");
                 }
+
                 gameOver = true;
             }
             else if(m_GameBoard.FreeCells == 0) //tie

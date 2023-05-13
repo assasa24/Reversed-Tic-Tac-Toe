@@ -15,17 +15,17 @@ namespace ReversedTicTacToe
             int boardSize,totalHumanPlayers;
             ePlayerSign player1Sign, player2Sign;
 
-            boardSize = boardSizeValidator();
-            totalHumanPlayers = totalPlayersValidator();
-            playerSignValidator(out player1Sign, out player2Sign);
+            boardSize = getBoardSizeFromUser();
+            totalHumanPlayers = getTotalPlayersFromUser();
+            getPlayerSignsFromUser(out player1Sign, out player2Sign);
             m_GameEngine = new GameEngine(boardSize, totalHumanPlayers, player1Sign, player2Sign);
         }
 
-        private void playerSignValidator(out ePlayerSign player1Sign, out ePlayerSign player2Sign)
+        private void getPlayerSignsFromUser(out ePlayerSign o_Player1Sign, out ePlayerSign o_Player2Sign)
         {
             char chosenSign;
 
-            Console.WriteLine("Choose sign: X or O");
+            Console.WriteLine("Player 1, choose sign: X or O");
             while (!(char.TryParse(Console.ReadLine(), out chosenSign) && (chosenSign == 'x' ||
                 chosenSign == 'X' || chosenSign == 'O' || chosenSign == 'o')))
             {
@@ -34,22 +34,22 @@ namespace ReversedTicTacToe
 
             if (chosenSign == 'X' || chosenSign == 'x')
             {
-                player1Sign = ePlayerSign.X;
-                player2Sign = ePlayerSign.O;
+                o_Player1Sign = ePlayerSign.X;
+                o_Player2Sign = ePlayerSign.O;
             }
             else
             {
-                player1Sign = ePlayerSign.O;
-                player2Sign = ePlayerSign.X;
+                o_Player1Sign = ePlayerSign.O;
+                o_Player2Sign = ePlayerSign.X;
             }
         }
 
-        private int boardSizeValidator()
+        private int getBoardSizeFromUser()
         {
             int boardSize;
 
             Console.WriteLine("Hi! Welcome to Reversed Tic Tac Toe");
-            Console.WriteLine("Please choose your board size.");
+            Console.WriteLine("Please choose the board's square width.");
             while ((!int.TryParse(Console.ReadLine(), out boardSize)) || boardSize < 3 || boardSize > 9)
             {
                 Console.WriteLine("invalid size. try again");
@@ -58,7 +58,7 @@ namespace ReversedTicTacToe
             return boardSize;
         }
 
-        private int totalPlayersValidator()
+        private int getTotalPlayersFromUser()
         {
             int totalHumanPlayers;
 
@@ -87,11 +87,9 @@ namespace ReversedTicTacToe
                 { 
                     Console.Write(" " + j.ToString() + "  "); 
                 }
-                
             }
 
             Console.WriteLine();
-
             for (int i = 0; i < totalRows; i++)
             {
                 Console.Write(" "+ i.ToString() +" ");
@@ -104,13 +102,13 @@ namespace ReversedTicTacToe
             }
         }
 
-        private void printMatrixCell(eBoardValue cell)
+        private void printMatrixCell(eBoardValue i_Cell)
         {
-            if (cell == eBoardValue.Empty)
+            if (i_Cell == eBoardValue.Empty)
             {
                 Console.Write(" ");
             }
-            else if (cell == eBoardValue.O)
+            else if (i_Cell == eBoardValue.O)
             {
                 Console.Write("O");
             }
@@ -135,20 +133,20 @@ namespace ReversedTicTacToe
                     Console.WriteLine("It's Player2's turn.");
                 }
 
-                coordinateValidator(out x, out y);
+                getCoordinatesFromUser(out x, out y);
                 m_GameEngine.SetCoordinateForCurrentPlayer(x, y);
             }
         }
 
-        private void coordinateValidator(out int x, out int y)
+        private void getCoordinatesFromUser(out int io_X, out int io_Y)
         {
             bool isInputValid = false;
             string coordinates;
             int totalRows = m_GameEngine.GetTotalRows();
             int totalCols = m_GameEngine.GetTotalCols();
 
-            x = 0;
-            y = 0;
+            io_X = 0;
+            io_Y = 0;
             Console.WriteLine("Please choose your next turn in a 'row' + space key + 'column' manner");
             Console.WriteLine("For example: type '1', ' ', '2' for choosing the cell in row 1, col 2");
             while (!isInputValid)
@@ -161,10 +159,10 @@ namespace ReversedTicTacToe
                     break;
                 }
 
-                if (int.TryParse(numbers[0], out x) && int.TryParse(numbers[1], out y)
-                    && (x >= 0 && x < totalRows && y >= 0 && y < totalCols))
+                if (numbers.Length > 1 && int.TryParse(numbers[0], out io_X) && int.TryParse(numbers[1], out io_Y)
+                    && (io_X >= 0 && io_X < totalRows && io_Y >= 0 && io_Y < totalCols))
                 {
-                    if (m_GameEngine.getBoardValueInCoordinates(x, y) != eBoardValue.Empty)
+                    if (m_GameEngine.getBoardValueInCoordinates(io_X, io_Y) != eBoardValue.Empty)
                     {
                         Console.WriteLine("occupied cell! please choose again");
                     }
@@ -172,6 +170,10 @@ namespace ReversedTicTacToe
                     {
                         isInputValid = true;
                     }
+                }
+                else if(io_X > totalRows - 1 || io_Y > totalCols - 1)
+                {
+                    Console.WriteLine("Coordinates are out of bounds! Please keep in mind the board's size.");
                 }
                 else
                 {
@@ -236,18 +238,19 @@ namespace ReversedTicTacToe
             return anotherGame;
         }
 
-        private void validatePlayerFinalChoice(out char playerFinalChoice)
+        private void validatePlayerFinalChoice(out char io_PlayerFinalChoice)
         {
-            bool isValidInput = char.TryParse(Console.ReadLine(), out playerFinalChoice);
-            
+            bool isValidInput;
+
             Console.WriteLine("Game over. Please choose:");
             Console.WriteLine("1. Play again: 'Y'");
             Console.WriteLine("2. Quit: 'Q'");
-            while (!isValidInput || (playerFinalChoice != 'y' && playerFinalChoice != 'Y'
-                && playerFinalChoice != 'q' && playerFinalChoice != 'Q'))
+            isValidInput = char.TryParse(Console.ReadLine(), out io_PlayerFinalChoice);           
+            while (!isValidInput || (io_PlayerFinalChoice != 'y' && io_PlayerFinalChoice != 'Y'
+                && io_PlayerFinalChoice != 'q' && io_PlayerFinalChoice != 'Q'))
             {
                 Console.WriteLine("Invalid choice. Enter choice again");
-                isValidInput = char.TryParse(Console.ReadLine(), out playerFinalChoice);
+                isValidInput = char.TryParse(Console.ReadLine(), out io_PlayerFinalChoice);
             }
         }
     }
