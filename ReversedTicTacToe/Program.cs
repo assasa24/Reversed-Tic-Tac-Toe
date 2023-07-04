@@ -9,10 +9,12 @@ namespace ReversedTicTacToe
     {
         public static void Main()
         {
-            UserInterface userInterface;
+            UserInterfaceForm userInterFaceForm = new UserInterfaceForm();
+            userInterFaceForm.ShowDialog();
+            //UserInterface userInterface;
 
-            userInterface = new UserInterface();
-            userInterface.PlayGame();
+            //userInterface = new UserInterface();
+            //userInterface.PlayGame();
         }
     }
 }
