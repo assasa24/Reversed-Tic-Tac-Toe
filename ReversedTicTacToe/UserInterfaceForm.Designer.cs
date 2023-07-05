@@ -40,6 +40,8 @@ namespace ReversedTicTacToe
             this.labelCols = new System.Windows.Forms.Label();
             this.numericUpDownCols = new System.Windows.Forms.NumericUpDown();
             this.buttonStart = new System.Windows.Forms.Button();
+            this.XSignBox = new System.Windows.Forms.CheckBox();
+            this.OSignBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCols)).BeginInit();
             this.SuspendLayout();
@@ -73,7 +75,7 @@ namespace ReversedTicTacToe
             // checkBoxPlayer2
             // 
             this.checkBoxPlayer2.AutoSize = true;
-            this.checkBoxPlayer2.Location = new System.Drawing.Point(62, 130);
+            this.checkBoxPlayer2.Location = new System.Drawing.Point(62, 149);
             this.checkBoxPlayer2.Name = "checkBoxPlayer2";
             this.checkBoxPlayer2.Size = new System.Drawing.Size(86, 21);
             this.checkBoxPlayer2.TabIndex = 4;
@@ -84,7 +86,7 @@ namespace ReversedTicTacToe
             // textBoxPlayer2
             // 
             this.textBoxPlayer2.Enabled = false;
-            this.textBoxPlayer2.Location = new System.Drawing.Point(185, 130);
+            this.textBoxPlayer2.Location = new System.Drawing.Point(185, 147);
             this.textBoxPlayer2.Name = "textBoxPlayer2";
             this.textBoxPlayer2.Size = new System.Drawing.Size(100, 22);
             this.textBoxPlayer2.TabIndex = 5;
@@ -114,6 +116,7 @@ namespace ReversedTicTacToe
             this.numericUpDownRows.Name = "numericUpDownRows";
             this.numericUpDownRows.Size = new System.Drawing.Size(45, 22);
             this.numericUpDownRows.TabIndex = 8;
+            this.numericUpDownRows.ValueChanged += new System.EventHandler(this.numericUpDownRows_ValueChanged);
             // 
             // labelCols
             // 
@@ -130,6 +133,7 @@ namespace ReversedTicTacToe
             this.numericUpDownCols.Name = "numericUpDownCols";
             this.numericUpDownCols.Size = new System.Drawing.Size(52, 22);
             this.numericUpDownCols.TabIndex = 10;
+            this.numericUpDownCols.ValueChanged += new System.EventHandler(this.numericUpDownCols_ValueChanged);
             // 
             // buttonStart
             // 
@@ -141,11 +145,35 @@ namespace ReversedTicTacToe
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
+            // XSignBox
+            // 
+            this.XSignBox.AutoSize = true;
+            this.XSignBox.Location = new System.Drawing.Point(62, 89);
+            this.XSignBox.Name = "XSignBox";
+            this.XSignBox.Size = new System.Drawing.Size(39, 21);
+            this.XSignBox.TabIndex = 12;
+            this.XSignBox.Text = "X";
+            this.XSignBox.UseVisualStyleBackColor = true;
+            this.XSignBox.CheckedChanged += new System.EventHandler(this.XSignBox_CheckedChanged);
+            // 
+            // OSignBox
+            // 
+            this.OSignBox.AutoSize = true;
+            this.OSignBox.Location = new System.Drawing.Point(62, 109);
+            this.OSignBox.Name = "OSignBox";
+            this.OSignBox.Size = new System.Drawing.Size(41, 21);
+            this.OSignBox.TabIndex = 13;
+            this.OSignBox.Text = "O";
+            this.OSignBox.UseVisualStyleBackColor = true;
+            this.OSignBox.CheckedChanged += new System.EventHandler(this.OSignBox_CheckedChanged);
+            // 
             // UserInterfaceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(311, 382);
+            this.Controls.Add(this.OSignBox);
+            this.Controls.Add(this.XSignBox);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.numericUpDownCols);
             this.Controls.Add(this.labelCols);
@@ -181,5 +209,7 @@ namespace ReversedTicTacToe
         private System.Windows.Forms.Label labelCols;
         private System.Windows.Forms.NumericUpDown numericUpDownCols;
         private System.Windows.Forms.Button buttonStart;
+        private System.Windows.Forms.CheckBox XSignBox;
+        private System.Windows.Forms.CheckBox OSignBox;
     }
 }

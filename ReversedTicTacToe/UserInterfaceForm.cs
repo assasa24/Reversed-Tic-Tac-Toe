@@ -11,9 +11,14 @@ namespace ReversedTicTacToe
 {
     public partial class UserInterfaceForm : Form
     {
+        private ePlayerSign m_Player1Sign;
+        private ePlayerSign m_Player2Sign;
+        private bool m_IsPlayer2Human;
+
         public UserInterfaceForm()
         {
             InitializeComponent();
+            m_IsPlayer2Human = false;
         }
 
         private void UserInterfaceForm_Load(object sender, EventArgs e)
@@ -32,19 +37,21 @@ namespace ReversedTicTacToe
             {
                 textBoxPlayer2.Enabled = true;
                 textBoxPlayer2.Text = "";
+                m_IsPlayer2Human = true;
             }
             else
             {
                 textBoxPlayer2.Enabled = false;
                 textBoxPlayer2.Text = "[Computer]";
+                m_IsPlayer2Human = false;
             }
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
             if(numericUpDownRows.Value != numericUpDownCols.Value
-                || !(numericUpDownRows.Value >= 3 && numericUpDownRows.Value <= 8) 
-                || !(numericUpDownCols.Value >= 3 && numericUpDownCols.Value <= 8))
+                || !(numericUpDownRows.Value >= 4 && numericUpDownRows.Value <= 10) 
+                || !(numericUpDownCols.Value >= 4 && numericUpDownCols.Value <= 10))
             {
                 MessageBox.Show("Invalid values for rows/cols entered. Please enter values once again.", "Invalid input");
             }
@@ -60,10 +67,40 @@ namespace ReversedTicTacToe
 
         private void sendValuesToBoard(int i_RowsEntered, int i_ColsEntered)
         {
-            GameBoardForm gameBoard = new GameBoardForm(i_RowsEntered, i_ColsEntered);
+            GameBoardForm gameBoard = new GameBoardForm(i_RowsEntered, i_ColsEntered, m_IsPlayer2Human, m_Player1Sign, m_Player2Sign);
             gameBoard.setAllButtons();
             gameBoard.ShowDialog();
             
+        }
+
+        private void numericUpDownRows_ValueChanged(object sender, EventArgs e)
+        {
+            numericUpDownCols.Value = numericUpDownRows.Value;
+        }
+
+        private void numericUpDownCols_ValueChanged(object sender, EventArgs e)
+        {
+            numericUpDownRows.Value = numericUpDownCols.Value;
+        }
+
+        private void XSignBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (XSignBox.Checked)
+            {
+                OSignBox.Checked = false;
+                m_Player1Sign = ePlayerSign.X;
+                m_Player2Sign = ePlayerSign.O;
+            }
+        }
+
+        private void OSignBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (OSignBox.Checked)
+            {
+                XSignBox.Checked = false;
+                m_Player1Sign = ePlayerSign.O;
+                m_Player2Sign = ePlayerSign.X;
+            }
         }
     }
 }

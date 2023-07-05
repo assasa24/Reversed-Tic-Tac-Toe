@@ -13,7 +13,16 @@ namespace ReversedTicTacToe
         private const int k_NotFound = -1;
         private ePlayerType m_CurrentTurn;
         private int m_totalHumanPlayers;
+        private string m_RoundWinner;
         Random m_Random;
+
+        public string RoundWinner
+        {
+            get
+            {
+                return m_RoundWinner;
+            }
+        }
 
         public GameEngine(int i_boardSize, int i_totalHumanPlayers, ePlayerSign i_player1Sign, ePlayerSign i_player2Sign)
         {
@@ -301,20 +310,24 @@ namespace ReversedTicTacToe
                     losingSign = m_GameBoard.Board[0, losingCombinationDiagonal];
                 }
 
-                if((char)losingSign == (char)player1Sign)
+                
+
+                if ((char)losingSign == (char)player1Sign)
                 {
-                    pointsAdding("player2");
+                    m_RoundWinner = "player2";
                 }
                 else
                 {
-                    pointsAdding("player1");
+                    m_RoundWinner = "player1";
                 }
+                pointsAdding(m_RoundWinner);
 
                 gameOver = true;
             }
             else if(m_GameBoard.FreeCells == 0) //tie
             {
                 gameOver = true;
+                m_RoundWinner = "tie";
             }
 
             return gameOver;
