@@ -55,6 +55,18 @@ namespace ReversedTicTacToe
             {
                 MessageBox.Show("Invalid values for rows/cols entered. Please enter values once again.", "Invalid input");
             }
+            else if(textBoxPlayer1.Text =="")
+            {
+                MessageBox.Show("Please enter a proper name for player 1", "Empty player name");
+            }
+            else if(textBoxPlayer2.Enabled == true && textBoxPlayer2.Text == "")
+            {
+                MessageBox.Show("Please enter a proper name for player 2", "Empty player name");
+            }
+            else if(OSignBox.Checked == false && XSignBox.Checked == false)
+            {
+                MessageBox.Show("Player 1, please choose your sign. X or O.", "Sign not filled");
+            }
             else
             {
                 int rowsEntered = (int)numericUpDownRows.Value;

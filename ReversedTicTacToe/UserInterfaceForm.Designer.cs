@@ -31,7 +31,7 @@ namespace ReversedTicTacToe
         {
             this.Players = new System.Windows.Forms.Label();
             this.labelPlayer1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxPlayer1 = new System.Windows.Forms.TextBox();
             this.checkBoxPlayer2 = new System.Windows.Forms.CheckBox();
             this.textBoxPlayer2 = new System.Windows.Forms.TextBox();
             this.labelBoardSize = new System.Windows.Forms.Label();
@@ -65,12 +65,12 @@ namespace ReversedTicTacToe
             this.labelPlayer1.TabIndex = 1;
             this.labelPlayer1.Text = "Player 1:";
             // 
-            // textBox1
+            // textBoxPlayer1
             // 
-            this.textBox1.Location = new System.Drawing.Point(185, 69);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 2;
+            this.textBoxPlayer1.Location = new System.Drawing.Point(185, 69);
+            this.textBoxPlayer1.Name = "textBoxPlayer1";
+            this.textBoxPlayer1.Size = new System.Drawing.Size(100, 22);
+            this.textBoxPlayer1.TabIndex = 2;
             // 
             // checkBoxPlayer2
             // 
@@ -182,7 +182,7 @@ namespace ReversedTicTacToe
             this.Controls.Add(this.labelBoardSize);
             this.Controls.Add(this.textBoxPlayer2);
             this.Controls.Add(this.checkBoxPlayer2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxPlayer1);
             this.Controls.Add(this.labelPlayer1);
             this.Controls.Add(this.Players);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -200,7 +200,7 @@ namespace ReversedTicTacToe
 
         private System.Windows.Forms.Label Players;
         private System.Windows.Forms.Label labelPlayer1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxPlayer1;
         private System.Windows.Forms.CheckBox checkBoxPlayer2;
         private System.Windows.Forms.TextBox textBoxPlayer2;
         private System.Windows.Forms.Label labelBoardSize;

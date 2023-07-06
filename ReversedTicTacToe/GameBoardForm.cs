@@ -94,17 +94,17 @@ namespace ReversedTicTacToe
                 {
                     case "player1":
                         dialogTitle = "A Win";
-                        dialogMessage = "The winner is player1";
+                        dialogMessage = "The winner is player1. Would you like to play another round?";
                         break;
                     case "player2":
                         dialogTitle = "A Win";
                         if (m_IsPlayer2Human)
                         {
-                            dialogMessage = "The winner is player2";
+                            dialogMessage = "The winner is player2. Would you like to play another round?";
                         }
                         else
                         {
-                            dialogMessage = "The winner is computer";
+                            dialogMessage = "The winner is computer. Would you like to play another round?";
                         }
                         break;
                     case "tie":
@@ -119,6 +119,7 @@ namespace ReversedTicTacToe
                 }
                 else if (result == DialogResult.No)
                 {
+                    Application.Exit();
                     // User clicked No
                     // Handle accordingly or perform an alternative action
                 }
